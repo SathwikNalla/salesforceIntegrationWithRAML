@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="delete-data-from-apicentrics__cFlow" doc:id="148b94e4-9c71-46d6-8574-a869e47dff14" >
+		<set-variable value="#[attributes.queryParams.Id]" doc:name="Set Variable" doc:id="4aa4a29c-ef24-4b6c-b790-2ba0aea3cfed" variableName="Value"/>
+		<ee:transform doc:name="Transform Message" doc:id="1eede5cc-012a-43fb-bc55-75a5326e8774">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+[vars.Value]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:delete doc:name="Delete" doc:id="87006e83-62e6-4dd5-a6a3-4fdb4d06c392" config-ref="Salesforce_Config">
+		</salesforce:delete>
+		<ee:transform doc:name="Transform Message" doc:id="f656eaaf-1874-4234-a49a-9c43ed6c2be6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

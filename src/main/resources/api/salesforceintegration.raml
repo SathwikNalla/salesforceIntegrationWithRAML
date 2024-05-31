@@ -1,0 +1,70 @@
+#%RAML 1.0
+title: SalesforceIntegration
+mediaType: 
+- application/json
+description: Integrating with salesforce
+traits:
+  Error: !include Traits/Error.raml
+uses:
+  lib: Library/Library.raml
+/salesforce:
+  is:
+    - Error
+  get:
+    description: It is will display the data in the APICentrics__c object
+    responses:
+      200:
+        body:
+          application/json:
+            type: string
+            example: "This the data of APICentrics__c object"
+  post:
+    body:
+      application/json:
+        type: !include DataTypes/Data.raml
+        example: !include Example/Details.json
+    responses:
+      201:
+        body:
+          application/json:
+            type: string
+            example: "Created"       
+  put:
+    body:
+      application/json:
+        type: !include DataTypes/Data.raml
+        example: !include Example/Details.json
+    responses:
+      200:
+        body:
+          application/json:
+            type: string
+            example: "Updated Successfully"           
+  delete:
+    description: It will delete perticular record
+    queryParameters:
+      Id:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: string
+            example: "Deleted Successfully"
+  patch:
+    body:
+      application/json:
+        type: lib.Patch
+        example: !include Example/Update.json
+    responses:
+      200:
+        body:
+          application/json:
+            type: string
+            example: "Updated"
+              
+          
+
+              
+              

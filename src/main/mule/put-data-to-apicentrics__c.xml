@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="put-data-to-apicentrics__cSub_Flow" doc:id="f692d9d1-a64d-4129-97f4-de2e5ac36650" >
+		<ee:transform doc:name="Transform Message" doc:id="38081a7c-1f7f-4df8-bdcc-10bdd2ebdbff" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map ((item, index) -> {
+    "Email__c": item.Email__c,
+    "PhoneNumber__c": item.PhoneNumber__c,
+    "Name__c": item.Name__c,
+    "Id": item.Id
+})]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:upsert objectType="APICentrics__c" externalIdFieldName="Id" doc:name="Upsert" doc:id="39de5bc3-e457-401a-b43c-51c7d2ab6520" config-ref="Salesforce_Config"/>
+		<ee:transform doc:name="Transform Message" doc:id="242e60aa-858b-4106-855e-dc1bfbba4c2e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

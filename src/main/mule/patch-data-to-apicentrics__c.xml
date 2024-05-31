@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="patch-data-to-apicentrics__cFlow" doc:id="a26b9c6d-5842-4663-895c-b469ea9ccdfc" >
+		<ee:transform doc:name="Transform Message" doc:id="432fe000-bd9e-421a-8ea3-4da552177534" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	Id: payload01.Id,
+	Name__c: payload01.Name__c,
+	PhoneNumber__c: payload01.PhoneNumber__c as String
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:update type="APICentrics__c" doc:name="Update" doc:id="ace29b17-8ae6-4f82-8f8a-2edb7305a59b" config-ref="Salesforce_Config" />
+		<ee:transform doc:name="Transform Message" doc:id="0eb9d5d7-157b-4f1e-a5ed-235c563b1c6e">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
